@@ -1,5 +1,5 @@
 const path = require('path')
-const HtmlWebpackPlugin  = require('html-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 const isProduction = process.env.NODE_ENV === 'production'
 const config = {
@@ -10,6 +10,12 @@ const config = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'index.js',
+    library: {
+      name: 'calc',
+      type: 'umd',
+      export: 'default'
+    },
+    globalObject: 'globalThis',
     clean: true
   },
 
@@ -26,16 +32,16 @@ const config = {
           {
             loader: 'babel-loader',
             options: {
-              presets:[['@babel/preset-env']]
+              presets: [['@babel/preset-env']]
             }
           },
-          { loader: 'ts-loader'}
-        ]        
+          { loader: 'ts-loader' }
+        ]
       }
     ]
   },
 
-  plugins: [new HtmlWebpackPlugin()]
+  plugins: [...(!isProduction ? [new HtmlWebpackPlugin()] : [])]
 }
 
 module.exports = config
